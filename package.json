@@ -1,0 +1,60 @@
+{
+  "name": "nuxt-ipfs",
+  "version": "1.0.0",
+  "description": "IPFS integration module for Nuxt 3 using Helia",
+  "repository": "degenhero/nuxt-ipfs",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build prepare",
+    "clean": "rimraf dist .nuxt .output node_modules/.vite",
+    "release": "npm run lint && npm run test && npm run prepack && npm publish",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@helia/unixfs": "^3.0.0",
+    "@nuxt/kit": "^3.10.0",
+    "blockstore-core": "^4.3.10",
+    "datastore-core": "^9.2.7",
+    "helia": "^3.0.1",
+    "multiformats": "^13.0.0"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^0.5.5",
+    "@nuxt/schema": "^3.10.0",
+    "@nuxt/test-utils": "^3.11.0",
+    "@nuxt/types": "^2.18.1",
+    "@types/node": "^20.11.0",
+    "nuxt": "^3.10.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt3",
+    "ipfs",
+    "helia",
+    "nuxt-module"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

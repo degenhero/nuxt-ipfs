@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node",
+      "@nuxt/types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "#imports": ["./.nuxt/imports"],
+      "#app": ["./.nuxt/imports/app"],
+      "~/*": ["./*"],
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "./playground/**/*",
+    "./.nuxt/nuxt.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

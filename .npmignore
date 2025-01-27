@@ -1,0 +1,13 @@
+.nuxt
+.output
+.env
+.idea
+.vscode
+playground
+coverage
+node_modules
+*.log
+.gitignore
+.eslintrc
+.prettierrc
+vitest.config.ts

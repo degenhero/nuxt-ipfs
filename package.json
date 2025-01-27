@@ -1,6 +1,6 @@
 {
   "name": "nuxt-ipfs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "IPFS integration module for Nuxt 3 using Helia",
   "repository": "degenhero/nuxt-ipfs",
   "license": "MIT",

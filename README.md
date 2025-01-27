@@ -1,16 +1,16 @@
 # nuxt-ipfs
 
-A Nuxt 3 module that provides IPFS functionality through Helia, the modern JavaScript IPFS implementation.
+A Nuxt 3 module that provides IPFS integration using Helia, with built-in support for storing and displaying media files (images and videos).
 
 ## Features
 
-- Upload files to IPFS
-- Store text content on IPFS
-- Retrieve files and text from IPFS
-- List directory contents
-- TypeScript support
-- Uses in-memory storage by default
-
+- 🖼️ Upload and display images and videos using IPFS
+- 📝 Store and retrieve text content
+- 🎯 Zero configuration required
+- 🔧 Customizable storage options
+- 🎨 Built-in media viewer component
+- 💪 TypeScript support
+- ⚡ Powered by Helia, the modern JavaScript IPFS implementation
 
 ## Installation
 
@@ -27,38 +27,7 @@ pnpm add nuxt-ipfs
 
 ## Setup
 
-1. Add `nuxt-ipfs` dependency to your project:
-
-```bash
-npm install nuxt-ipfs
-# or
-yarn add nuxt-ipfs
-```
-
-2. Add `nuxt-ipfs` to the `modules` section of your `nuxt.config.ts`:
-
-```ts
-export default defineNuxtConfig({
-  modules: ['nuxt-ipfs'],
-  ipfs: {
-    blockstoreType: 'memory',  // 'memory' or 'browser'
-    datastoreType: 'memory'    // 'memory' or 'browser'
-  }
-})
-```
-
-
-## Setup
-
-1. Add `nuxt-ipfs` dependency to your project:
-
-```bash
-npm install nuxt-ipfs
-# or
-yarn add nuxt-ipfs
-```
-
-2. Add `nuxt-ipfs` to the `modules` section of your `nuxt.config.ts`:
+Add `nuxt-ipfs` to the `modules` section of your `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
@@ -72,34 +41,129 @@ export default defineNuxtConfig({
 
 ## Usage
 
-The module provides a `$ipfs` helper that you can use in your components:
+### Uploading and Displaying Media
+
+```vue
+<template>
+  <div>
+    <!-- File Upload -->
+    <input 
+      type="file" 
+      @change="uploadFile"
+      accept="image/*,video/*"
+    />
+
+    <!-- Display Media -->
+    <IpfsMedia 
+      v-if="cid"
+      :cid="cid"
+      class="w-full max-w-2xl"
+    />
+  </div>
+</template>
+
+<script setup>
+const cid = ref('')
+
+async function uploadFile(event) {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  try {
+    const result = await $ipfs.add(file)
+    cid.value = result.cid
+  } catch (error) {
+    console.error('Upload failed:', error)
+  }
+}
+</script>
+```
+
+### Storing Text Content
 
 ```vue
 <script setup>
-// Upload a file
-async function uploadFile(file) {
-  const result = await $ipfs.add(file)
-  console.log('File uploaded with CID:', result.cid)
-}
+// Store text in IPFS
+const result = await $ipfs.addString('Hello IPFS!')
+console.log('Content CID:', result.cid)
 
-// Store text content
-async function storeText(text) {
-  const result = await $ipfs.addString(text)
-  console.log('Text stored with CID:', result.cid)
-}
-
-// Retrieve content
-async function getText(cid) {
-  const content = await $ipfs.getString(cid)
-  console.log('Retrieved content:', content)
-}
-
-// List directory contents
-async function listContents(cid) {
-  const entries = await $ipfs.ls(cid)
-  console.log('Directory contents:', entries)
-}
+// Retrieve text from IPFS
+const content = await $ipfs.getString(result.cid)
+console.log('Retrieved content:', content)
 </script>
+```
+
+## API Reference
+
+### IPFS Helper ($ipfs)
+
+- `add(file: File | Blob)`: Upload a file to IPFS
+  ```ts
+  const result = await $ipfs.add(file)
+  console.log(result.cid) // Returns the CID of the uploaded file
+  ```
+
+- `addString(content: string)`: Store text content in IPFS
+  ```ts
+  const result = await $ipfs.addString('Hello IPFS!')
+  console.log(result.cid)
+  ```
+
+- `get(cid: string)`: Get file content as Uint8Array
+  ```ts
+  const data = await $ipfs.get(cid)
+  ```
+
+- `getString(cid: string)`: Get text content
+  ```ts
+  const text = await $ipfs.getString(cid)
+  ```
+
+- `ls(cid: string)`: List directory contents
+  ```ts
+  const entries = await $ipfs.ls(cid)
+  ```
+
+### IpfsMedia Component
+
+The `IpfsMedia` component automatically handles displaying both images and videos from IPFS.
+
+```vue
+<template>
+  <IpfsMedia 
+    :cid="cid"
+    class="custom-class"
+  />
+</template>
+```
+
+Props:
+- `cid` (required): The IPFS CID of the media file
+
+Features:
+- Automatic media type detection
+- Built-in loading states
+- Error handling
+- Responsive design
+- Support for images (PNG, JPEG, GIF) and videos (MP4, WebM)
+
+## Configuration
+
+In `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['nuxt-ipfs'],
+  ipfs: {
+    // Use memory storage (default)
+    blockstoreType: 'memory',
+    datastoreType: 'memory',
+
+    // Or use persistent browser storage
+    blockstoreType: 'browser',
+    datastoreType: 'browser'
+  }
+})
 ```
 
 ## Development
@@ -115,5 +179,16 @@ npm run dev:prepare
 npm run dev
 
 # Build the module
-npm run build
+npm run prepack
+
+# Run tests
+npm run test
 ```
+
+## License
+
+MIT License
+
+## Contributing
+
+Feel free to contribute! Issues and pull requests are welcome.
